@@ -1,5 +1,5 @@
 import dataProcessor.data_processor_page as data_processor_page
-import ProjectXML.xml_page as xml_page
+import xmlproject.xml_page as xml_page
 
 PROJECTS = {
     "Analyseur de données": {
