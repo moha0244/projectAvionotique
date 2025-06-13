@@ -1,5 +1,5 @@
 import streamlit as st
-from ProjectXML.logic import extract_card_block, replace_card_block
+from xmlproject.logic import extract_card_block, replace_card_block
 
 
 def main() :
