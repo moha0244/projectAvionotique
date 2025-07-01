@@ -100,7 +100,7 @@ def data_viewer_page():
         return
 
     if 'filter_reset_counter' not in st.session_state:
-        st.session_state.filter_reset_counter = False
+        st.session_state.filter_reset_counter = 0
 
     with st.sidebar:
         st.header("Filtres dynamiques")
@@ -133,7 +133,7 @@ def data_viewer_page():
 
         elif st.button("Réinitialiser les filtres"):
             st.session_state.current_df = st.session_state.original_df.copy()
-            st.session_state.filter_reset_counter = True
+            st.session_state.filter_reset_counter += 1
             st.rerun()
 
         if st.button("Retour au téléversement"):
