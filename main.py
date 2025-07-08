@@ -86,7 +86,6 @@ def main():
     if "selected_project" not in st.session_state:
         st.session_state.selected_project = None
 
-
     if st.session_state.selected_project:
         selected_project = PROJECTS[st.session_state.selected_project]
         project_wrapper(selected_project["module"].main)
