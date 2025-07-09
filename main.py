@@ -1,7 +1,7 @@
 import streamlit as st
 from list_project import PROJECTS
 
-# Configuration de la page
+# Page configuration
 st.set_page_config(
     page_title="Avionic Project Portal",
     page_icon="\u2708",
@@ -10,21 +10,20 @@ st.set_page_config(
 )
 
 def show_home():
-    # En-tête
+    # Header
     st.markdown("""
         <div style='text-align: center; margin-bottom: 2rem;'>
-            <h1 style='color: #1a73e8;'> Portail des Outils Avioniques</h1>
+            <h1 style='color: #1a73e8;'> Avionics Tools Portal</h1>
             <p style='font-size: 1.1rem; color: #5f6368;'>
-                Plateforme intégrée pour le traitement des données et configurations avioniques
+                Integrated platform for avionics data processing and configuration
             </p>
         </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("### Modules Disponibles")
-    st.markdown("Sélectionnez un outil dans la liste ci-dessous :")
+    st.markdown("### Available Modules")
+    st.markdown("Select a tool from the list below:")
 
-    search_query = st.text_input(" Rechercher un outil...")
-
+    search_query = st.text_input(" Search for a tool...")
 
     filtered_projects = PROJECTS
     if search_query:
@@ -42,15 +41,15 @@ def show_home():
             with st.container(border=True, height=180):
                 st.markdown(f"#### {project_data['icon']} {project_name}")
                 st.markdown(f"<small>{project_data['description']}</small>", unsafe_allow_html=True)
-                if st.button("Ouvrir →", key=f"btn_{project_name}", use_container_width=True):
+                if st.button("Open →", key=f"btn_{project_name}", use_container_width=True):
                     st.session_state.selected_project = project_name
                     st.rerun()
 
-    # Pied de page
+    # Footer
     st.markdown("---")
     st.markdown("""
         <div style='text-align: center; margin-top: 2rem; color: #5f6368; font-size: 0.9rem;'>
-            © 2025 Département du centre d'essai avionique - Tous droits réservés
+            © 2025 Avionics Test Center Department – All rights reserved
         </div>
     """, unsafe_allow_html=True)
 
@@ -59,7 +58,7 @@ def project_wrapper(func):
     col1, col2 = st.columns([0.85, 0.15])
 
     with col2:
-        if st.button("Retour à l'accueil", use_container_width=True):
+        if st.button("Back to Home", use_container_width=True):
             st.session_state.selected_project = None
             st.rerun()
 
@@ -78,7 +77,7 @@ def project_wrapper(func):
 
     st.markdown("</div></div>", unsafe_allow_html=True)
 
-    # Contenu du projet
+    # Load the selected project module
     func()
 
 

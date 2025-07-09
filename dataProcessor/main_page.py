@@ -2,34 +2,34 @@ import streamlit as st
 import pandas as pd
 from io import StringIO
 
-# Étape 1 : Sélection des colonnes à afficher
+# Step 1: Column selection
 def show_column_selection(df):
-    st.markdown("Choisissez les colonnes que vous souhaitez visualiser dans le tableau de données.")
+    st.markdown("Choose the columns you want to display in the data table.")
     available_columns = df.columns.tolist()
-    mode = st.selectbox("Mode de sélection des colonnes", ["Tout afficher", "Sélection personnalisée"], key="select_mode_param")
+    mode = st.selectbox("Column selection mode", ["Show all", "Custom selection"], key="select_mode_param")
 
-    if mode == "Tout afficher":
+    if mode == "Show all":
         return available_columns
-    return st.multiselect("Colonnes à inclure", options=available_columns, default=[], key="filter_columns_parameter")
+    return st.multiselect("Columns to include", options=available_columns, default=[], key="filter_columns_parameter")
 
 def choice_column_filtered_parameter(df):
-    with st.expander("Étape 1 : Sélectionner les colonnes à afficher", expanded=True):
+    with st.expander("Step 1: Select columns to display", expanded=True):
         selected_columns = show_column_selection(df)
         if not selected_columns:
-            st.warning("Veuillez sélectionner au moins une colonne.")
+            st.warning("Please select at least one column.")
             return None
         return df[selected_columns]
 
-# Étape 2 : Sélection des colonnes à filtrer
+# Step 2: Column filtering
 def choice_column_filtered_search(selected_columns):
-    with st.expander("Étape 2 : Sélectionner les colonnes à filtrer (facultatif)", expanded=True):
+    with st.expander("Step 2: Select columns to filter (optional)", expanded=True):
         if not selected_columns:
-            st.info("Aucune colonne sélectionnée à l'étape précédente.")
+            st.info("No columns selected in the previous step.")
             return
-        filter_columns = st.multiselect("Colonnes pour les filtres", options=selected_columns, default=[], key="filter")
+        filter_columns = st.multiselect("Columns for filtering", options=selected_columns, default=[], key="filter")
         st.session_state.filter_columns = filter_columns
 
-# Chargement et lecture du fichier
+# CSV parsing
 def try_read_csv(uploaded_file, delimiter, encoding):
     try:
         content = uploaded_file.getvalue().decode(encoding)
@@ -55,19 +55,19 @@ def load_and_prepare_data(uploaded_file):
         return None
     return choice_column_filtered_parameter(df)
 
-# Page principale
+# Main page
 def main_page():
-    st.title("Analyseur de données - Téléversement")
+    st.title("Data Viewer - Upload")
 
-    # Vérifier si un fichier est déjà stocké
+    # Check if a file is already stored
     if "uploaded_file" not in st.session_state:
-        uploaded_file = st.file_uploader("Téléversez un fichier CSV", type=['csv'])
+        uploaded_file = st.file_uploader("Upload a CSV file", type=['csv'])
         if uploaded_file:
             st.session_state.uploaded_file = uploaded_file
-            st.success(f"Fichier chargé : {uploaded_file.name}")
+            st.success(f"File uploaded: {uploaded_file.name}")
     else:
-        st.success(f"Fichier déjà chargé : {st.session_state.uploaded_file.name}")
-        if st.button(" Changer de fichier"):
+        st.success(f"File already loaded: {st.session_state.uploaded_file.name}")
+        if st.button("Change file"):
             del st.session_state.uploaded_file
             st.rerun()
         uploaded_file = st.session_state.uploaded_file
@@ -78,8 +78,8 @@ def main_page():
             choice_column_filtered_search(filtered_df.columns.tolist())
             st.session_state.original_df = filtered_df
             st.session_state.current_df = filtered_df.copy()
-            if st.button("Afficher les données"):
+            if st.button("View data"):
                 st.session_state.page = "data_viewer"
                 st.rerun()
         else:
-            st.error("Impossible de traiter le fichier.")
+            st.error("Failed to process the file.")
